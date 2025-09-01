@@ -34,7 +34,6 @@ public class showAccountServlet extends HttpServlet {
 		UserModel user = (UserModel) session.getAttribute("loggedUser");
 		int userId = user.getUserId();
 		UserService service = new UserService();
-		System.out.println("abcd"+request.getParameter("accountNo"));
 		if (request.getParameter("action")!=null) {
 			String status = (String) request.getParameter("action");
 			System.out.println(status);

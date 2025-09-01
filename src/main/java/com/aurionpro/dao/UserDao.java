@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -377,26 +378,35 @@ public class UserDao {
 		return false;
 	}
 
-	public boolean applyForLoan(HttpServletRequest request,Loan loan,int userId) {
-
+	public boolean applyForLoan(HttpServletRequest request, Loan loan, int userId) {
 		if (connection != null) {
 			try {
+				// 1. Insert Loan Details
 				preparedStatement = connection.prepareStatement(
-						"INSERT INTO loans (user_id, loan_type, loan_amount, tenure, status) VALUES (?, ?, ?, ?, 'PENDING')");
+						"INSERT INTO loans (user_id, loan_type, loan_amount, tenure_months, status,account_number) VALUES (?, ?, ?, ?, 'PENDING', 502314789651)",
+						Statement.RETURN_GENERATED_KEYS);
 				preparedStatement.setInt(1, userId);
-				preparedStatement.setString(2,loan.getLoanType());
-				preparedStatement.setDouble(3, loan.getLoanAmount());	
+				preparedStatement.setString(2, loan.getLoanType());
+				preparedStatement.setDouble(3, loan.getLoanAmount());
 				preparedStatement.setInt(4, loan.getTenure());
-				 ResultSet rs = preparedStatement.getGeneratedKeys();
-		            int loanId = 0;
-		            if (rs.next()) {
-		                loanId = rs.getInt(1);
-		            }
 
-		            // 2. Insert Documents as BLOBs
-		            String docSQL = "INSERT INTO loan_documents (loan_id, doc_type, document, file_name, content_type) VALUES (?, ?, ?, ?, ?)";
-		            preparedStatement = connection.prepareStatement(docSQL);
-		            try {
+				int rows = preparedStatement.executeUpdate();
+
+				int loanId = 0;
+				if (rows > 0) {
+					ResultSet rs = preparedStatement.getGeneratedKeys();
+					if (rs.next()) {
+						loanId = rs.getInt(1);
+					}
+					rs.close();
+				}
+
+				// 2. Insert Documents as BLOBs
+				if (loanId > 0) {
+					String docSQL = "INSERT INTO loan_documents (loan_id, doc_type, document, file_name, content_type) VALUES (?, ?, ?, ?, ?)";
+					preparedStatement = connection.prepareStatement(docSQL);
+
+					try {
 						uploadDocument(request, preparedStatement, loanId, "identity_proof", "Identity Proof");
 						uploadDocument(request, preparedStatement, loanId, "address_proof", "Address Proof");
 						uploadDocument(request, preparedStatement, loanId, "income_proof", "Income Proof");
@@ -404,9 +414,9 @@ public class UserDao {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-		           
-				preparedStatement.executeUpdate();
-				
+				}
+
+				return true;
 
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -414,10 +424,12 @@ public class UserDao {
 		}
 		return false;
 	}
-	 private void uploadDocument(HttpServletRequest request, PreparedStatement stmtDoc, int loanId, String fieldName, String docType) throws Exception {
-	        Part filePart = request.getPart(fieldName);
-	        if (filePart != null && filePart.getSize() > 0) {
-	            InputStream inputStream = filePart.getInputStream();
+
+	private void uploadDocument(HttpServletRequest request, PreparedStatement stmtDoc, int loanId, String fieldName,
+			String docType) throws Exception {
+		Part filePart = request.getPart(fieldName);
+		if (filePart != null && filePart.getSize() > 0) {
+			try (InputStream inputStream = filePart.getInputStream()) { // ✅ Auto-close
 	            stmtDoc.setInt(1, loanId);
 	            stmtDoc.setString(2, docType);
 	            stmtDoc.setBlob(3, inputStream);
@@ -425,5 +437,6 @@ public class UserDao {
 	            stmtDoc.setString(5, filePart.getContentType());
 	            stmtDoc.executeUpdate();
 	        }
-	    }
+		}
+	}
 }

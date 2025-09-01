@@ -26,7 +26,7 @@ List<AccountDetails> accounts = (List<AccountDetails>) session.getAttribute("acc
 					<!-- Loan Details -->
 					<div class="mb-3">
 						<label class="form-label">Loan Type</label> <select
-							name="loantype" class="form-select" required>
+						id="loantype"	name="loantype" class="form-select" required>
 							<option value="Home Loan">Home Loan</option>
 							<option value="Car Loan">Car Loan</option>
 							<option value="Personal Loan">Personal Loan</option>
@@ -36,12 +36,12 @@ List<AccountDetails> accounts = (List<AccountDetails>) session.getAttribute("acc
 
 					<div class="mb-3">
 						<label class="form-label">Loan Amount</label> <input type="number"
-							name="loanAmount" class="form-control" required>
+							name="loanAmount" id= "loanAmount" class="form-control" required>
 					</div>
 
 					<div class="mb-3">
 						<label class="form-label">Tenure (in months)</label> <input
-							type="number" name="tenure" class="form-control" required>
+							type="number" name="tenure" id="tenure" class="form-control" required>
 					</div>
 
 					<!-- Document Upload -->

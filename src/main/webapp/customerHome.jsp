@@ -115,7 +115,13 @@ body {
 	</script>
 	<%
 	}
-	%>
+	if ("Loan".equals(msg)) {
+		%>
+	<script>
+		alert("Loan Applied successful!");
+	</script>
+
+
 	<%
 	UserModel loggedUser = (UserModel) session.getAttribute("loggedUser");
 	if (loggedUser == null) {
@@ -189,7 +195,7 @@ body {
 				<p>Update your personal details anytime .</p>
 				<a href="MyProfileServlet">Profile</a>
 			</div>
-			
+
 			<div class="card">
 				<h3>Apply For Loan</h3>
 				<p>Apply for any type of loans here.</p>

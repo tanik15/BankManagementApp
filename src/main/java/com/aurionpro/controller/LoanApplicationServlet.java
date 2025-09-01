@@ -3,6 +3,7 @@ package com.aurionpro.controller;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +18,7 @@ import com.aurionpro.service.UserService;
  * Servlet implementation class LoanApplicationServlet
  */
 @WebServlet("/LoanApplicationServlet")
+@MultipartConfig
 public class LoanApplicationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -49,6 +51,7 @@ public class LoanApplicationServlet extends HttpServlet {
         UserModel user = (UserModel) session.getAttribute("loggedUser");
 		int userId = user.getUserId();
         String loanType = request.getParameter("loantype");
+        System.out.println(loanType);
         double loanAmount = Double.parseDouble(request.getParameter("loanAmount"));
         int tenure = Integer.parseInt(request.getParameter("tenure"));
         // Upload multiple docs
@@ -57,10 +60,11 @@ public class LoanApplicationServlet extends HttpServlet {
         loan.setLoanType(loanType);
         loan.setLoanAmount(loanAmount);
         loan.setTenure(tenure);
+        loan.setAccountNo(50233123);
         
         UserService service = new UserService();
         service.applyForLoan(request, loan, userId);
-       
+        response.sendRedirect("customerHome.jsp?msg=Loan");
 	}
 	
 

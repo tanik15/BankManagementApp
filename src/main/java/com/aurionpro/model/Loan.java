@@ -7,7 +7,16 @@ public class Loan {
     private int userId;
     private String loanType;
     private double loanAmount;
-    private int tenure; // in months
+    private long accountNo;
+    public long getAccountNo() {
+		return accountNo;
+	}
+
+	public void setAccountNo(long accountNo) {
+		this.accountNo = accountNo;
+	}
+
+	private int tenure; // in months
     private double interestRate;
     private String status; // PENDING, APPROVED, REJECTED
     private Date applicationDate;
