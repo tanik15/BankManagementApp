@@ -13,7 +13,16 @@ public class CustomerDetails {
     private String address;
     private String aadharNo;
     private String panNo;
-    private Date createdAt;
+    private String userName;
+    public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	private Date createdAt;
 
     // --- Constructors ---
     public CustomerDetails() {

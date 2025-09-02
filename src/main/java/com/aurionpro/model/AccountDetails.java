@@ -6,7 +6,7 @@ import java.sql.Date;
 public class AccountDetails {
 	private Long accountNo;
 	private Long accountId;
-
+	private String fullName;
 	private int userId;
 	private String accountType;
 	private BigDecimal balance;
@@ -15,6 +15,24 @@ public class AccountDetails {
 	private String branch;
 	private Date openedOn;
 	private String status;
+	private String request;
+
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+
+
+	public String getRequest() {
+		return request;
+	}
+
+	public void setRequest(String request) {
+		this.request = request;
+	}
 
 	public String getStatus() {
 		return status;

@@ -387,7 +387,7 @@ public class UserDao {
 						Statement.RETURN_GENERATED_KEYS);
 				preparedStatement.setInt(1, userId);
 				preparedStatement.setString(2, loan.getLoanType());
-				preparedStatement.setDouble(3, loan.getLoanAmount());
+				preparedStatement.setBigDecimal(3, loan.getLoanAmount());
 				preparedStatement.setInt(4, loan.getTenure());
 
 				int rows = preparedStatement.executeUpdate();
@@ -439,4 +439,35 @@ public class UserDao {
 	        }
 		}
 	}
+	
+	public List<Loan> getUserLoans(int userId) {
+		List<Loan> loans = new ArrayList<>();
+		if (connection != null) {
+			try {
+				preparedStatement = connection.prepareStatement(
+						"SELECT * FROM loans WHERE user_id = ?");
+				preparedStatement.setInt(1, userId);
+				ResultSet rs = preparedStatement.executeQuery();
+				while(rs.next()) {
+					Loan loan = new Loan();
+					loan.setLoanId(rs.getInt("loan_id"));
+	                loan.setLoanType(rs.getString("loan_type"));
+	                loan.setAccountNo(rs.getLong("account_number"));
+	                loan.setLoanAmount(rs.getBigDecimal("loan_amount"));
+	                loan.setTenure(rs.getInt("tenure_months"));
+	                loan.setInterestRate(rs.getDouble("interest_rate"));
+	                loan.setApplicationDate(rs.getDate("application_date"));
+	                loan.setStatus(rs.getString("status"));
+	                loans.add(loan);
+				}
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return loans;
+	}
+	
+	
+	
 }

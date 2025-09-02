@@ -1,12 +1,22 @@
 package com.aurionpro.model;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 
 public class Loan {
     private int loanId;
     private int userId;
     private String loanType;
-    private double loanAmount;
+    private String name;
+    public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	private BigDecimal loanAmount;
     private long accountNo;
     public long getAccountNo() {
 		return accountNo;
@@ -24,7 +34,7 @@ public class Loan {
     // 🔹 Constructors
     public Loan() {}
 
-    public Loan(int loanId, int userId, String loanType, double loanAmount, int tenure, double interestRate, String status, Date applicationDate) {
+    public Loan(int loanId, int userId, String loanType, BigDecimal loanAmount, int tenure, double interestRate, String status, Date applicationDate) {
         this.loanId = loanId;
         this.userId = userId;
         this.loanType = loanType;
@@ -60,11 +70,11 @@ public class Loan {
         this.loanType = loanType;
     }
 
-    public double getLoanAmount() {
+    public BigDecimal getLoanAmount() {
         return loanAmount;
     }
 
-    public void setLoanAmount(double loanAmount) {
+    public void setLoanAmount(BigDecimal loanAmount) {
         this.loanAmount = loanAmount;
     }
 
@@ -103,7 +113,7 @@ public class Loan {
     // 🔹 Utility method for EMI calculation
     public double calculateEMI() {
         double monthlyRate = interestRate / (12 * 100); 
-        return (loanAmount * monthlyRate * Math.pow(1 + monthlyRate, tenure)) /
+        return (Double.parseDouble(loanAmount.toString())* monthlyRate * Math.pow(1 + monthlyRate, tenure)) /
                (Math.pow(1 + monthlyRate, tenure) - 1);
     }
 

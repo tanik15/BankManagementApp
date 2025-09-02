@@ -69,4 +69,8 @@ public class UserService {
 	public boolean applyForLoan(HttpServletRequest request,Loan loan,int userId) {
 		return dao.applyForLoan(request, loan, userId);
 	}
+	
+	public List<Loan> getAppliedLoans(int userId) {
+		return dao.getUserLoans(userId);
+	}
 }

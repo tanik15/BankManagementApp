@@ -120,9 +120,8 @@ body {
 	<script>
 		alert("Loan Applied successful!");
 	</script>
-
-
 	<%
+	}
 	UserModel loggedUser = (UserModel) session.getAttribute("loggedUser");
 	if (loggedUser == null) {
 		response.sendRedirect("login.jsp?error=sessionExpired");
@@ -200,6 +199,12 @@ body {
 				<h3>Apply For Loan</h3>
 				<p>Apply for any type of loans here.</p>
 				<a href="applyLoan.jsp">Loan</a>
+			</div>
+			
+			<div class="card">
+				<h3>View Applied Loan</h3>
+				<p>Applied Loan Status.</p>
+				<a href="viewAppliedLoanServlet">Loan</a>
 			</div>
 
 		</div>
